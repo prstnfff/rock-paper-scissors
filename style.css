@@ -1,0 +1,59 @@
+h1{
+    text-align: center;
+}
+
+.top{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.score-box{
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 25%;
+    overflow: hidden;
+    height: 80px;
+}
+
+.score-box h3{
+    padding: 10px;
+    margin: 0;
+}
+
+.computer-score-box h3{
+    background-color: cadetblue;
+}
+
+.player-score-box h3{
+    background-color:crimson;
+}
+
+.play-by-play{
+    border: 1px solid goldenrod;
+    margin: 30px;
+    color: goldenrod;
+    background-color: black;
+    overflow: hide;
+}
+
+.play-by-play h3{
+    margin: 0;
+    border: 1px solid goldenrod;
+}
+
+.play-by-play-text{
+    overflow: auto;
+    height: 200px;
+}
+
+.button-bar{
+    display: flex;
+    justify-content: center;
+}
+
+.playerchoice{
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}

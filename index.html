@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang = 'en'>
     <head>
         <title> Rock Paper Scissors</title>
         <meta charset="utf-8">
-        <script type = "text/javascript" src="./logic.js"></script>
+        <link rel = 'stylesheet' href = './style.css'>
+
     </head>
     <body>
-    
+        <h1>Rock, Paper, Scissors - Shoot!</h1>
+        <div class = 'top'>
+            <div class = 'score-box player-score-box'>
+                <h3> Player's Score</h3>
+                <div class = 'players-score'>0</div>
+            </div>
+            <div>
+                <h3>How many points to win?</h3>
+                <input type="number" min="1" step="1" placeholder = 5 class = 'winning-score'>
+            </div>
+            <button type = 'button' class = 'reset'>Reset Game</button> 
+
+            <div class = 'score-box computer-score-box'>
+                <h3> Computer's Score</h3>
+                <div class = 'computers-score'>0</div>
+            </div>
+        </div>
+
+        
+        <div class = 'play-by-play'>
+            <h3>Play-by-Play:</h3> 
+            <div class = 'play-by-play-text'></div>
+        </div>
+
+        <div class = 'button-bar'>
+            <button type = 'button' class = 'playerchoice rock'>Rock &#128142;</button>
+            <button type = 'button' class = 'playerchoice paper'>Paper &#128240;</button>
+            <button type = 'button' class = 'playerchoice scissors'>Scissors &#9986;</button>
+        </div>
+
+        <script type = "text/javascript" src="./logic.js"></script>
     </body>
+
 </html>

@@ -1,3 +1,29 @@
+let playerChoiceButtons = document.querySelectorAll(".playerchoice")
+console.log(playerChoiceButtons)
+
+playerChoiceButtons.forEach( x => {
+
+    let choice = x.classList[1]
+
+    x.addEventListener('click', event => {
+        playRound(choice)
+    })
+})
+
+let playByPlay = document.querySelector('.play-by-play-text')
+let playerScore = document.querySelector('.players-score')
+let computerScore = document.querySelector('.computers-score')
+
+let playerScoreBox = document.querySelector('.player-score-box')
+let computerScoreBox = document.querySelector('.computer-score-box')
+
+let gameRound = 1;
+
+let computerWins = 0;
+let playerWins = 0;
+
+let scoreToWinInput = document.querySelector('.winning-score')
+let scoreToWin      = 5
 
 function getRandomInteger(upperBound = 10) {
     return(Math.floor( (Math.random() * upperBound) + 1))
@@ -13,7 +39,9 @@ function getComputerChoice(){
     return(choiceLookup[randNum])
 }
 
-function playRound(playerSelection, computerSelection){
+function playRound(playerSelection){
+
+    computerSelection = getComputerChoice()
 
     let weaknesses = { 
 
@@ -24,110 +52,118 @@ function playRound(playerSelection, computerSelection){
 
     if( playerSelection === computerSelection){
 
-        return('tie')
+        outcome = 'tie'
 
     } else if( weaknesses[playerSelection] === computerSelection){
 
-        return('computer')
+        outcome = 'computer'
+        computerWins++
 
     } else {
 
-        return('player')
+        outcome = 'player'
+        playerWins++
 
     }
 
-}
+    summarizeRound(outcome, playerSelection, computerSelection)
+    scoreUpdate(computerWins, playerWins)
 
-function getPlayerInput(){
-
-    let validInput = false;
-    let playerSelection = ''
-
-    while(!validInput){
-
-         playerSelection = prompt("Make your selection: Rock, Paper of Scissors").toLowerCase().trim()
-
-        validInput = ['rock', 'paper', 'scissors'].includes(playerSelection)
-
-        if(!validInput){
-            alert("Please select one of rock, paper or scissors")
-        }
-
+    if(playerWins == scoreToWin || computerWins == scoreToWin){
+        announceWinner()
+        return('')
     }
-
-    return(playerSelection)
-
+    
+    gameRound += 1
 }
 
 function summarizeRound(outcome, playerChoice, computerChoice){
 
+
+    let content = '';
+
     if(outcome === 'tie'){
-        console.log(`Tie! Both players choose ${playerChoice}`)
+        content =  `Tie! Both players choose ${playerChoice}</p>`
     } else {
 
         let winnerChoice = (outcome === 'player') ? playerChoice : computerChoice
         let loserChoice  = (outcome === 'player') ? computerChoice : playerChoice
 
-        console.log(`${outcome} wins! ${winnerChoice} beats ${loserChoice}`)
+        content = `${outcome} wins! ${winnerChoice} beats ${loserChoice}</p>`
 
     }
+
+    playByPlay.insertAdjacentHTML('afterBegin', `<p>Round ${gameRound}: ${content}`)
 
 }
 
 function scoreUpdate(computerWins, playerWins){
 
-    console.log(`The score is computer: ${computerWins} - player: ${playerWins}`)
+    playerScore.textContent =  playerWins
+    computerScore.textContent = computerWins
 
 }
 
-function finalScore(computerWins, playerWins){
+function reset(){
 
-    console.log("======================\nFINAL SCORE:")
+    computerWins = 0;
+    playerWins = 0;
+    scoreUpdate(0, 0)
 
-    let winner = '';
-    let outcome = '';
+    enableButtons()
 
-    if(computerWins > playerWins){
+    computerScoreBox.removeAttribute('style', 'background-color:goldenrod')
+    playerScoreBox.removeAttribute('style', 'background-color:goldenrod')
 
-        console.log(`Computer wins ${computerWins} to ${playerWins}`)
+    playByPlay.textContent = ''
 
-    } else if (playerWins > computerWins){
+    gameRound = 1
 
-        console.log(`Player wins ${computerWins} to ${playerWins}`)
-
-    } else {
-
-        console.log(`Its a tie! ${computerWins} to ${playerWins}`)
-
-    }
 }
 
-function game(rounds = 5){
+document.querySelector('.reset').addEventListener('click', event => {
+    reset()
+})
 
-    let computerWins = 0
-    let playerWins = 0
+scoreToWinInput.addEventListener('change', event => {
+    scoreToWin = scoreToWinInput.value
+    reset()
+})
 
-    for(let i = 0; i < rounds; i++){
+function disableButtons(){
+    document.querySelectorAll('.playerchoice').forEach( btn => {
+        btn.setAttribute('disabled', '')
+    })
+}
 
-        console.log("======================")
-        console.log(`ROUND ${i}`)
+function enableButtons(){
+    document.querySelectorAll('.playerchoice').forEach( btn => {
+        btn.removeAttribute('disabled')
+    })
+}
 
-        let playerChoice = getPlayerInput()
-        let computerChoice = getComputerChoice()
+function announceWinner(){
 
-        let outcome = playRound(playerChoice, computerChoice)
+    let winner = ''
+    let winnerScore = 0
+    let loserScore = 0
 
-        if(outcome === 'computer'){
-            computerWins++
-        } else if (outcome === 'player'){
-            playerWins++
-        }
+    if(computerWins == scoreToWin){
+        winner = 'Computer'
+        winnerScore = computerWins
+        loserScore = playerWins
+        computerScoreBox.setAttribute('style', 'background-color:goldenrod')
 
-        summarizeRound(outcome, playerChoice, computerChoice)
-        scoreUpdate(computerWins, playerWins)
+    }
+    else if (playerWins == scoreToWin){
+        winner = 'Player'
+        winnerScore = playerWins
+        loserScore = computerWins
+        playerScoreBox.setAttribute('style', 'background-color:goldenrod')
     }
 
-    finalScore(computerWins, playerWins)
-
-
+    
+    playByPlay.insertAdjacentHTML('afterBegin', `<p>GAME OVER: ${winner} Wins! After ${gameRound} rounds, ${winner} wins ${winnerScore} to ${loserScore}`)
+    disableButtons()
+    
 }
